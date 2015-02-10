@@ -1,14 +1,14 @@
-all: clean smartos_virtualbox.box
+all: smartos_virtualbox.box
 
-smartos-latest.iso:
-	curl -z $@ -LO https://us-east.manta.joyent.com/Joyent_Dev/public/SmartOS/$@
+download:
+	curl -z smartos-latest.iso -LO https://us-east.manta.joyent.com/Joyent_Dev/public/SmartOS/smartos-latest.iso
 
 clean:
-	rm -rvf output-virtualbox-iso
+	rm -rvf output-virtualbox-iso packer_cache
 
 smartos_virtualbox.box: smartos-latest.json smartos-latest.iso Vagrantfile.template
 	packer build $<
 
-.PHONY: smartos-latest.iso box clean
+.PHONY: download clean
 
 # vim:noet:

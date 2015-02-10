@@ -1,0 +1,6 @@
+.vagrant/
+output-virtualbox-iso/
+packer_cache/
+*.box
+*.iso
+Vagrantfile

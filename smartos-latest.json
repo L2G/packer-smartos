@@ -1,0 +1,30 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "guest_os_type": "Solaris11_64",
+      "guest_additions_mode": "disable",
+      "iso_url": "smartos-latest.iso",
+      "iso_checksum_type": "none",
+      "ssh_username": "root",
+      "ssh_password": "packer",
+      "ssh_wait_timeout": "2h",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "1024"],
+        ["modifyvm", "{{.Name}}", "--cpus", "2"],
+        ["modifyvm", "{{.Name}}", "--pae", "on"]
+      ],
+      "boot_wait": "4s",
+      "boot_command": "<enter><wait10><wait10><wait10><wait10><wait5><enter>dhcp<enter>c0d0<enter>packer<enter>packer<enter><enter><enter>y<enter>",
+      "shutdown_command": "poweroff"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "smartos_{{.Provider}}.box",
+      "include": "smartos-latest.iso",
+      "vagrantfile_template": "Vagrantfile.template"
+    }
+  ]
+}

@@ -19,6 +19,12 @@
       "shutdown_command": "poweroff"
     }
   ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "post_install.bash"
+    }
+  ],
   "post-processors": [
     {
       "type": "vagrant",

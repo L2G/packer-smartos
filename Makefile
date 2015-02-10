@@ -6,7 +6,7 @@ download:
 clean:
 	rm -rvf output-virtualbox-iso packer_cache
 
-smartos_virtualbox.box: smartos-latest.json smartos-latest.iso Vagrantfile.template
+smartos_virtualbox.box: smartos-latest.json smartos-latest.iso Vagrantfile.template post_install.bash
 	packer build $<
 
 .PHONY: download clean

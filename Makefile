@@ -43,10 +43,11 @@ smartos-barebones.ovf smartos-barebones-disk1.vmdk smartos-barebones-disk2.vmdk:
 smartos-base64-virtualbox.box: smartos-base64.json smartos-barebones.ovf provision_base64.bash
 	packer build $<
 
-integrate: smartos-barebones-virtualbox.box
-	vagrant destroy -f
-	vagrant box add $< --name smartos-barebones --force
-	vagrant up
+integrate: smartos-barebones-virtualbox.box smartos-base64-virtualbox.box
+	for vm in barebones base64; do \
+		vagrant destroy -f $$vm ; \
+		vagrant box add smartos-$${vm}-virtualbox.box --name smartos-$${vm} --force ; \
+	done
 
 .PHONY: download clean integrate
 .SECONDARY: smartos-latest-USB.vmdk

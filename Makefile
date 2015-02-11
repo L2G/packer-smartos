@@ -35,10 +35,10 @@ $(SEED_NAME).ovf: smartos-latest-USB.vmdk
 smartos-barebones-virtualbox.box: smartos-barebones.json $(SEED_NAME).ovf provision_barebones.bash
 	packer build $<
 
-smartos-barebones.ovf smartos-barebones-disk1.vmdk smartos-barebones-disk2.vmdk: smartos-barebones-virtualbox.box
-	mv output-virtualbox-ovf/$@ .
+smartos-barebones.ovf: smartos-barebones-virtualbox.box
+	mv output-virtualbox-ovf/$@ output-virtualbox-ovf/*.vmdk .
 	touch $@
-	rmdir output-virtualbox-ovf || true
+	rmdir output-virtualbox-ovf
 
 smartos-base64-virtualbox.box: smartos-base64.json smartos-barebones.ovf provision_base64.bash
 	packer build $<

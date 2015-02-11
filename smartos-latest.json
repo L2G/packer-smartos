@@ -1,36 +1,27 @@
 {
   "builders": [
     {
-      "type": "virtualbox-iso",
-      "guest_os_type": "Solaris11_64",
+      "type": "virtualbox-ovf",
       "guest_additions_mode": "disable",
-      "iso_url": "smartos-latest.iso",
-      "iso_checksum_type": "none",
+      "source_path": "smartos-seed.ovf",
       "ssh_username": "root",
       "ssh_password": "packer",
       "ssh_wait_timeout": "2h",
       "vboxmanage": [
-        ["modifyvm", "{{.Name}}", "--memory", "1024"],
-        ["modifyvm", "{{.Name}}", "--cpus", "2"],
-        ["modifyvm", "{{.Name}}", "--pae", "on"]
+        ["createhd", "--filename", "{{.Name}}-disk2.vmdk", "--format", "VMDK",
+          "--size", "20000"],
+        ["storageattach", "{{.Name}}", "--storagectl", "ide0", "--port", "0",
+          "--device", "1", "--type", "hdd", "--medium", "{{.Name}}-disk2.vmdk"]
       ],
       "boot_wait": "4s",
-      "boot_command": "<enter><wait10><wait10><wait10><wait10><wait5><enter>dhcp<enter>c0d0<enter>packer<enter>packer<enter><enter><enter>y<enter>",
+      "boot_command": "<enter><wait10><wait10><wait10><wait10><wait5><enter>dhcp<enter>c0d1<enter>packer<enter>packer<enter><enter><enter>y<enter>",
       "shutdown_command": "poweroff"
-    }
-  ],
-  "provisioners": [
-    {
-      "type": "shell",
-      "script": "post_install.bash"
     }
   ],
   "post-processors": [
     {
       "type": "vagrant",
-      "output": "smartos_{{.Provider}}.box",
-      "include": "smartos-latest.iso",
-      "vagrantfile_template": "Vagrantfile.template"
+      "output": "smartos_{{.Provider}}.box"
     }
   ]
 }

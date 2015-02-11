@@ -43,7 +43,7 @@ smartos-base64-virtualbox.box: smartos-base64.json smartos-barebones.ovf provisi
 
 integrate: smartos-barebones-virtualbox.box
 	vagrant destroy -f
-	vagrant box add $< --name smartos --force
+	vagrant box add $< --name smartos-barebones --force
 	vagrant up
 
 .PHONY: download clean integrate

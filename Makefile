@@ -27,7 +27,7 @@ $(SEED_NAME).ovf: smartos-latest-USB.vmdk
 		--usb on
 	vboxmanage storagectl $(SEED_NAME) --name ide0 --add ide --portcount 2 --bootable on
 	vboxmanage storageattach $(SEED_NAME) --storagectl ide0 --port 0 --device 0 --type hdd \
-		--medium $<
+		--medium $< --mtype immutable
 	vboxmanage export $(SEED_NAME) --output $@
 	vboxmanage unregistervm $(SEED_NAME) --delete
 

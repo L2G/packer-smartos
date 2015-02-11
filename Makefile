@@ -1,4 +1,4 @@
-BOXES=smartos-barebones-virtualbox.box
+BOXES=smartos-barebones-virtualbox.box smartos-barebones.ovf smartos-barebones-disk1.vmdk smartos-barebones-disk2.vmdk
 
 all: $(BOXES)
 
@@ -31,9 +31,14 @@ $(SEED_NAME).ovf: smartos-latest-USB.vmdk
 smartos-barebones-virtualbox.box: smartos-barebones.json $(SEED_NAME).ovf
 	packer build $<
 
-integrate: $(BOXES)
+smartos-barebones.ovf smartos-barebones-disk1.vmdk smartos-barebones-disk2.vmdk: smartos-barebones-virtualbox.box
+	mv output-virtualbox-ovf/$@ .
+	touch $@
+	rmdir output-virtualbox-ovf || true
+
+integrate: smartos-barebones-virtualbox.box
 	vagrant destroy -f
-	vagrant box add smartos-barebones-virtualbox.box --name smartos --force
+	vagrant box add $< --name smartos --force
 	vagrant up
 
 .PHONY: download clean integrate

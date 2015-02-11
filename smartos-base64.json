@@ -1,0 +1,30 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "vm_name": "smartos-base64",
+      "guest_additions_mode": "disable",
+      "source_path": "smartos-barebones.ovf",
+      "import_opts": "keepnatmacs",
+      "ssh_username": "root",
+      "ssh_password": "packer",
+      "ssh_wait_timeout": "20m",
+      "boot_wait": "4s",
+      "boot_command": "<enter>",
+      "shutdown_command": "poweroff"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "provision_base64.bash"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "smartos-base64-{{.Provider}}.box",
+      "keep_input_artifact": true
+    }
+  ]
+}

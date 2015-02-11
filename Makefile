@@ -1,4 +1,6 @@
-BOXES=smartos-barebones-virtualbox.box smartos-barebones.ovf smartos-barebones-disk1.vmdk smartos-barebones-disk2.vmdk
+BOXES=smartos-barebones-virtualbox.box smartos-barebones.ovf \
+	smartos-barebones-disk1.vmdk smartos-barebones-disk2.vmdk \
+	smartos-base64-virtualbox.box
 
 all: $(BOXES)
 
@@ -35,6 +37,9 @@ smartos-barebones.ovf smartos-barebones-disk1.vmdk smartos-barebones-disk2.vmdk:
 	mv output-virtualbox-ovf/$@ .
 	touch $@
 	rmdir output-virtualbox-ovf || true
+
+smartos-base64-virtualbox.box: smartos-base64.json smartos-barebones.ovf provision_base64.bash
+	packer build $<
 
 integrate: smartos-barebones-virtualbox.box
 	vagrant destroy -f

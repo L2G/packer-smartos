@@ -16,18 +16,19 @@ smartos-latest-USB.img: smartos-latest-USB.img.bz2
 %.vmdk: %.img
 	vboxmanage convertfromraw $< $@ --format VMDK
 
-smartos-seed.ovf: smartos-latest-USB.vmdk
-	vboxmanage createvm --name $* --ostype Solaris11_64 --register
-	vboxmanage modifyvm $* --memory 1024 --acpi on --pae on --cpus 2 \
+SEED_NAME=smartos-seed
+$(SEED_NAME).ovf: smartos-latest-USB.vmdk
+	vboxmanage createvm --name $(SEED_NAME) --ostype Solaris11_64 --register
+	vboxmanage modifyvm $(SEED_NAME) --memory 1024 --acpi on --pae on --cpus 2 \
 		--boot1 dvd --boot2 disk --nic1 nat --audio none --clipboard disabled \
 		--usb on
-	vboxmanage storagectl $* --name ide0 --add ide --portcount 2 --bootable on
-	vboxmanage storageattach $* --storagectl ide0 --port 0 --device 0 --type hdd \
+	vboxmanage storagectl $(SEED_NAME) --name ide0 --add ide --portcount 2 --bootable on
+	vboxmanage storageattach $(SEED_NAME) --storagectl ide0 --port 0 --device 0 --type hdd \
 		--medium $<
-	vboxmanage export $* --output $@
-	vboxmanage unregistervm $* --delete
+	vboxmanage export $(SEED_NAME) --output $@
+	vboxmanage unregistervm $(SEED_NAME) --delete
 
-smartos_virtualbox.box: smartos-latest.json smartos-seed.ovf Vagrantfile.template post_install.bash
+smartos_virtualbox.box: smartos-latest.json $(SEED_NAME).ovf
 	packer build smartos-latest.json
 
 integrate: $(BOXES)

@@ -30,7 +30,7 @@ $(SEED_NAME).ovf: smartos-latest-USB.vmdk
 	vboxmanage export $(SEED_NAME) --output $@
 	vboxmanage unregistervm $(SEED_NAME) --delete
 
-smartos-barebones-virtualbox.box: smartos-barebones.json $(SEED_NAME).ovf
+smartos-barebones-virtualbox.box: smartos-barebones.json $(SEED_NAME).ovf provision_barebones.bash
 	packer build $<
 
 smartos-barebones.ovf smartos-barebones-disk1.vmdk smartos-barebones-disk2.vmdk: smartos-barebones-virtualbox.box

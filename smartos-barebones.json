@@ -19,6 +19,12 @@
       "shutdown_command": "poweroff"
     }
   ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "provision_barebones.bash"
+    }
+  ],
   "post-processors": [
     {
       "type": "vagrant",

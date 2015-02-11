@@ -21,7 +21,7 @@
   "post-processors": [
     {
       "type": "vagrant",
-      "output": "smartos_{{.Provider}}.box"
+      "output": "smartos-barebones-{{.Provider}}.box"
     }
   ]
 }

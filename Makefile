@@ -1,4 +1,4 @@
-BOXES=smartos_virtualbox.box
+BOXES=smartos-barebones-virtualbox.box
 
 all: $(BOXES)
 
@@ -28,12 +28,12 @@ $(SEED_NAME).ovf: smartos-latest-USB.vmdk
 	vboxmanage export $(SEED_NAME) --output $@
 	vboxmanage unregistervm $(SEED_NAME) --delete
 
-smartos_virtualbox.box: smartos-latest.json $(SEED_NAME).ovf
-	packer build smartos-latest.json
+smartos-barebones-virtualbox.box: smartos-barebones.json $(SEED_NAME).ovf
+	packer build $<
 
 integrate: $(BOXES)
 	vagrant destroy -f
-	vagrant box add smartos_virtualbox.box --name smartos --force
+	vagrant box add smartos-barebones-virtualbox.box --name smartos --force
 	vagrant up
 
 .PHONY: download clean integrate

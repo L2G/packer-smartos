@@ -5,7 +5,8 @@ BOXES=smartos-barebones-virtualbox.box smartos-barebones.ovf \
 all: $(BOXES)
 
 clean:
-	rm -rvf output-virtualbox-* packer_cache $(BOXES)
+	rm -rvf output-virtualbox-* packer_cache smartos-latest-USB.img \
+		smartos-seed* $(BOXES)
 
 download:
 	for suffix in .iso -USB.img.bz2; do \

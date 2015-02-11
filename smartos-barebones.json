@@ -2,6 +2,7 @@
   "builders": [
     {
       "type": "virtualbox-ovf",
+      "vm_name": "smartos-barebones",
       "guest_additions_mode": "disable",
       "source_path": "smartos-seed.ovf",
       "ssh_username": "root",
@@ -21,7 +22,8 @@
   "post-processors": [
     {
       "type": "vagrant",
-      "output": "smartos-barebones-{{.Provider}}.box"
+      "output": "smartos-barebones-{{.Provider}}.box",
+      "keep_input_artifact": true
     }
   ]
 }

@@ -11,7 +11,14 @@ cat >/usbkey/vagrant-guest.json <<EOF
   "image_uuid": "${zone_image_id}",
   "alias": "vagrant-guest",
   "hostname": "vagrant-guest",
-  "autoboot": true
+  "autoboot": true,
+  "nics": [
+    {
+      "nic_tag": "vagrant",
+      "ip": "dhcp",
+      "primary": true
+    }
+  ]
 }
 EOF
 

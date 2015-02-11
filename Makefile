@@ -6,7 +6,8 @@ all: $(BOXES)
 
 clean:
 	rm -rvf output-virtualbox-* packer_cache smartos-latest-USB.img \
-		smartos-seed* $(BOXES)
+		smartos-latest-USB.vmdk smartos-seed* $(BOXES)
+	vboxmanage unregistervm smartos-seed --delete || true
 
 download:
 	for suffix in .iso -USB.img.bz2; do \

@@ -1,13 +1,15 @@
 BOXES=smartos-barebones-virtualbox.box smartos-barebones.ovf \
 	smartos-barebones-disk1.vmdk smartos-barebones-disk2.vmdk \
 	smartos-base64-virtualbox.box
+SEED_NAME=smartos-seed
 
 all: $(BOXES)
 
 clean:
 	rm -rvf output-virtualbox-* packer_cache smartos-latest-USB.img \
-		smartos-latest-USB.vmdk smartos-seed* $(BOXES)
-	vboxmanage unregistervm smartos-seed --delete || true
+		smartos-latest-USB.vmdk $(SEED_NAME)* $(BOXES)
+	# --> Errors from VBoxManage below are expected, so do not be alarmed...
+	vboxmanage unregistervm $(SEED_NAME) --delete || true
 
 download:
 	for suffix in .iso -USB.img.bz2; do \
@@ -20,7 +22,6 @@ smartos-latest-USB.img: smartos-latest-USB.img.bz2
 %.vmdk: %.img
 	vboxmanage convertfromraw $< $@ --format VMDK
 
-SEED_NAME=smartos-seed
 $(SEED_NAME).ovf: smartos-latest-USB.vmdk
 	vboxmanage createvm --name $(SEED_NAME) --ostype Solaris11_64 --register
 	vboxmanage modifyvm $(SEED_NAME) --memory 1024 --acpi on --pae on --cpus 2 \

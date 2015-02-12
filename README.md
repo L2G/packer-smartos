@@ -36,7 +36,7 @@ make
 - `clean` - Remove all built boxes and intermediate files (_not_ downloads) from the filesystem, and remove the smartos-seed box from VirtualBox in case it is still installed.
 - `download` - Use Curl to check for and download new SmartOS live images.
 - `download-resume` - Use Curl to resume a download interrupted in the middle. To check for and download new images, use `make download` instead.
-- `integrate` Build the base boxes, then install them in Vagrant (overwriting previous versions if they are already installed). They can then be used with the included Vagrantfile.
+- `install` - Install the base boxes in Vagrant. (`install-barebones` and `install-base64` are also available.) They can then be used with the included Vagrantfile.
 
 ## Known issues
 

@@ -55,6 +55,10 @@ integrate: smartos-barebones-virtualbox.box smartos-base64-virtualbox.box
 		vagrant box add smartos-$${vm}-virtualbox.box --name smartos-$${vm} --force ; \
 	done
 
+install: install-barebones install-base64
+install-%: smartos-%-virtualbox.box
+	vagrant box add $< --name $(patsubst install-%,smartos-%,$@) --force
+
 .PHONY: download clean integrate
 .SECONDARY: smartos-latest-USB.vmdk
 

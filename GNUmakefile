@@ -16,6 +16,11 @@ download:
 		curl -z smartos-latest$$suffix -LO https://us-east.manta.joyent.com/Joyent_Dev/public/SmartOS/smartos-latest$$suffix ; \
 	done
 
+download-resume:
+	for suffix in .iso -USB.img.bz2; do \
+		curl -C - -LO https://us-east.manta.joyent.com/Joyent_Dev/public/SmartOS/smartos-latest$$suffix ; \
+	done
+
 smartos-latest-USB.img: smartos-latest-USB.img.bz2
 	bzip2 -dk $<
 

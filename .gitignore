@@ -4,4 +4,3 @@ packer_cache/
 *.box
 *.img.bz2
 *.iso
-Vagrantfile

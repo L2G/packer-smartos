@@ -45,3 +45,12 @@ done
 
 # Check to make sure the VM got installed and is running
 vmadm list | grep -q running
+
+# Make script errors fatal again
+set -e
+
+# Send a script to the VM
+vagrant_vm=$(vmadm list -po uuid)
+zlogin -i $vagrant_vm /bin/bash -c '
+  useradd -d /vagrant -m vagrant
+'

@@ -5,11 +5,15 @@ SEED_NAME=smartos-seed
 
 all: $(BOXES)
 
-clean:
+clean: clean-basebox-base64 clean-basebox-barebones clean-seed-from-vb
 	rm -rvf output-virtualbox-* packer_cache smartos-latest-USB.img \
 		smartos-latest-USB.vmdk $(SEED_NAME)* $(BOXES)
-	# --> Errors from VBoxManage below are expected, so do not be alarmed...
-	vboxmanage unregistervm $(SEED_NAME) --delete || true
+
+clean-seed-from-vb:
+	vboxmanage unregistervm $(SEED_NAME) --delete
+
+clean-basebox-%:
+	vboxmanage unregistervm $(patsubst clean-basebox-%,smartos-%,$@) --delete
 
 download:
 	for suffix in .iso -USB.img.bz2; do \
@@ -63,5 +67,6 @@ install-%: smartos-%-virtualbox.box
 
 .PHONY: download clean integrate
 .SECONDARY: smartos-latest-USB.vmdk
+.IGNORE: clean-seed-from-vb clean-basebox-base64 clean-basebox-barebones
 
 # vim:noet:

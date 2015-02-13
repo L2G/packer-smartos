@@ -30,8 +30,10 @@ smartos-latest-USB.img: smartos-latest-USB.img.bz2
 $(SEED_NAME).ovf: smartos-latest-USB.vmdk
 	vboxmanage createvm --name $(SEED_NAME) --ostype Solaris11_64 --register
 	vboxmanage modifyvm $(SEED_NAME) --memory 1024 --acpi on --pae on --cpus 2 \
-		--boot1 dvd --boot2 disk --nic1 nat --audio none --clipboard disabled \
-		--usb on --vram 16
+		--boot1 dvd --boot2 disk \
+		--nic1 nat --nic2 nat --nic3 nat --nic4 nat \
+		--cableconnected1 on --cableconnected2 on --cableconnected3 on --cableconnected4 on \
+		--audio none --clipboard disabled --usb on --vram 16
 	vboxmanage storagectl $(SEED_NAME) --name ide0 --add ide --portcount 2 --bootable on
 	vboxmanage storageattach $(SEED_NAME) --storagectl ide0 --port 0 --device 0 --type hdd \
 		--medium $< --mtype immutable

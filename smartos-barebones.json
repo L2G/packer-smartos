@@ -15,7 +15,7 @@
           "--device", "1", "--type", "hdd", "--medium", "{{.Name}}-disk2.vmdk"]
       ],
       "boot_wait": "4s",
-      "boot_command": "<enter><wait10><wait10><wait10><wait10><wait5><enter>dhcp<enter>c0d1<enter>packer<enter>packer<enter><enter><enter>y<enter>",
+      "boot_command": "<enter><wait10><wait10><wait10><wait10><wait5><enter>1<enter>dhcp<enter>c0d1<enter>packer<enter>packer<enter><enter><enter>y<enter>",
       "shutdown_command": "poweroff"
     }
   ],

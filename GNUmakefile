@@ -1,19 +1,19 @@
-BOXES=smartos-barebones-virtualbox.box smartos-barebones.ovf \
-	smartos-barebones-disk1.vmdk smartos-barebones-disk2.vmdk \
-	smartos-base64-virtualbox.box
 SEED_NAME=smartos-seed
+export SEED_NAME
 
-all: $(BOXES)
+all: barebones base64
 
-clean: clean-basebox-base64 clean-basebox-barebones clean-seed-from-vb
-	rm -rvf output-virtualbox-* packer_cache smartos-latest-USB.img \
-		smartos-latest-USB.vmdk $(SEED_NAME)* $(BOXES)
+clean: clean-base64 clean-barebones clean-seed-from-vb
+	rm -rvf smartos-latest-USB.img smartos-latest-USB.vmdk $(SEED_NAME)*
 
 clean-seed-from-vb:
 	vboxmanage unregistervm $(SEED_NAME) --delete
 
-clean-basebox-%:
-	vboxmanage unregistervm $(patsubst clean-basebox-%,smartos-%,$@) --delete
+clean-barebones:
+	$(MAKE) -C smartos-barebones clean
+
+clean-base64:
+	$(MAKE) -C smartos-base64 clean
 
 download:
 	for suffix in .iso -USB.img.bz2; do \
@@ -44,29 +44,19 @@ $(SEED_NAME).ovf: smartos-latest-USB.vmdk
 	vboxmanage export $(SEED_NAME) --output $@
 	vboxmanage unregistervm $(SEED_NAME) --delete
 
-smartos-barebones-virtualbox.box: smartos-barebones.json $(SEED_NAME).ovf provision_barebones.bash
-	packer build $<
+barebones:
+	$(MAKE) -C smartos-barebones all
 
-smartos-barebones.ovf: smartos-barebones-virtualbox.box
-	mv output-virtualbox-ovf/$@ output-virtualbox-ovf/*.vmdk .
-	touch $@
-	rmdir output-virtualbox-ovf
-
-smartos-base64-virtualbox.box: smartos-base64.json smartos-barebones.ovf provision_base64.bash
-	packer build $<
-
-integrate: smartos-barebones-virtualbox.box smartos-base64-virtualbox.box
-	for vm in barebones base64; do \
-		vagrant destroy -f $$vm ; \
-		vagrant box add smartos-$${vm}-virtualbox.box --name smartos-$${vm} --force ; \
-	done
+base64:
+	$(MAKE) -C smartos-base64 all
 
 install: install-barebones install-base64
-install-%: smartos-%-virtualbox.box
-	vagrant box add $< --name $(patsubst install-%,smartos-%,$@) --force
+install-%: %
+	$(MAKE) -C smartos-% install
 
-.PHONY: download clean integrate
+.PHONY: all clean clean-seed-from-db clean-barebones download download-resume \
+        barebones base64 install install-barebones install-base64
 .SECONDARY: smartos-latest-USB.vmdk
-.IGNORE: clean-seed-from-vb clean-basebox-base64 clean-basebox-barebones
+.IGNORE: clean clean-seed-from-vb
 
 # vim:noet:

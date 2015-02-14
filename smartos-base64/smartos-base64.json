@@ -4,7 +4,7 @@
       "type": "virtualbox-ovf",
       "vm_name": "smartos-base64",
       "guest_additions_mode": "disable",
-      "source_path": "smartos-barebones.ovf",
+      "source_path": "../smartos-barebones/output-virtualbox-ovf/smartos-barebones.ovf",
       "import_opts": "keepnatmacs",
       "ssh_username": "root",
       "ssh_password": "packer",

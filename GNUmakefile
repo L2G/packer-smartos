@@ -51,8 +51,10 @@ base64:
 	$(MAKE) -C smartos-base64 all
 
 install: install-barebones install-base64
-install-%: %
-	$(MAKE) -C smartos-% install
+install-barebones:
+	$(MAKE) -C smartos-barebones install
+install-base64:
+	$(MAKE) -C smartos-base64 install
 
 .PHONY: all clean clean-seed-from-db clean-barebones download download-resume \
         barebones base64 install install-barebones install-base64

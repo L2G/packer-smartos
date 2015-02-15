@@ -5,6 +5,7 @@
       "vm_name": "smartos-barebones",
       "guest_additions_mode": "disable",
       "source_path": "../smartos-seed.ovf",
+      "import_opts": "keepnatmacs",
       "ssh_username": "root",
       "ssh_password": "packer",
       "ssh_wait_timeout": "2h",

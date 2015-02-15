@@ -7,10 +7,10 @@ export SEED_FILES
 all: barebones base64
 
 clean: clean-base64 clean-barebones clean-seed-from-vb
-	rm -rvf smartos-latest-USB.img smartos-latest-USB.vmdk $(SEED_FILES)
+	-rm -rvf smartos-latest-USB.img smartos-latest-USB.vmdk $(SEED_FILES)
 
 clean-seed-from-vb:
-	vboxmanage unregistervm $(SEED_NAME) --delete
+	-vboxmanage unregistervm $(SEED_NAME) --delete
 
 clean-barebones:
 	$(MAKE) -C smartos-barebones clean
@@ -64,6 +64,5 @@ install-base64:
 .PHONY: all clean clean-seed-from-vb clean-barebones download download-resume \
         barebones base64 install install-barebones install-base64
 .SECONDARY: smartos-latest-USB.vmdk
-.IGNORE: clean clean-seed-from-vb
 
 # vim:noet:

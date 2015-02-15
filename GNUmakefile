@@ -1,10 +1,13 @@
 SEED_NAME=smartos-seed
 export SEED_NAME
 
+SEED_FILES=$(SEED_NAME).ovf $(SEED_NAME)-disk1.vmdk $(SEED_NAME).macaddrs
+export SEED_FILES
+
 all: barebones base64
 
 clean: clean-base64 clean-barebones clean-seed-from-vb
-	rm -rvf smartos-latest-USB.img smartos-latest-USB.vmdk $(SEED_NAME)*
+	rm -rvf smartos-latest-USB.img smartos-latest-USB.vmdk $(SEED_FILES)
 
 clean-seed-from-vb:
 	vboxmanage unregistervm $(SEED_NAME) --delete
@@ -31,7 +34,7 @@ smartos-latest-USB.img: smartos-latest-USB.img.bz2
 %.vmdk: %.img
 	vboxmanage convertfromraw $< $@ --format VMDK
 
-$(SEED_NAME).ovf: smartos-latest-USB.vmdk
+$(SEED_FILES): smartos-latest-USB.vmdk
 	vboxmanage createvm --name $(SEED_NAME) --ostype Solaris11_64 --register
 	vboxmanage modifyvm $(SEED_NAME) --memory 1024 --acpi on --pae on --cpus 2 \
 		--boot1 dvd --boot2 disk \
@@ -41,10 +44,12 @@ $(SEED_NAME).ovf: smartos-latest-USB.vmdk
 	vboxmanage storagectl $(SEED_NAME) --name ide0 --add ide --portcount 2 --bootable on
 	vboxmanage storageattach $(SEED_NAME) --storagectl ide0 --port 0 --device 0 --type hdd \
 		--medium $< --mtype immutable
-	vboxmanage export $(SEED_NAME) --output $@
+	vboxmanage export $(SEED_NAME) --output $(SEED_NAME).ovf
+	vboxmanage showvminfo $(SEED_NAME) --machinereadable |grep '^macaddress[1-4]=' \
+		> $(SEED_NAME).macaddrs
 	vboxmanage unregistervm $(SEED_NAME) --delete
 
-barebones: $(SEED_NAME).ovf
+barebones: $(SEED_FILES)
 	$(MAKE) -C smartos-barebones all
 
 base64: barebones

@@ -56,7 +56,7 @@ install-barebones:
 install-base64:
 	$(MAKE) -C smartos-base64 install
 
-.PHONY: all clean clean-seed-from-db clean-barebones download download-resume \
+.PHONY: all clean clean-seed-from-vb clean-barebones download download-resume \
         barebones base64 install install-barebones install-base64
 .SECONDARY: smartos-latest-USB.vmdk
 .IGNORE: clean clean-seed-from-vb

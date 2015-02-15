@@ -44,10 +44,10 @@ $(SEED_NAME).ovf: smartos-latest-USB.vmdk
 	vboxmanage export $(SEED_NAME) --output $@
 	vboxmanage unregistervm $(SEED_NAME) --delete
 
-barebones:
+barebones: $(SEED_NAME).ovf
 	$(MAKE) -C smartos-barebones all
 
-base64:
+base64: barebones
 	$(MAKE) -C smartos-base64 all
 
 install: install-barebones install-base64

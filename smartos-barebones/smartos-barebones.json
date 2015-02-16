@@ -30,7 +30,8 @@
     {
       "type": "vagrant",
       "output": "smartos-barebones-{{.Provider}}.box",
-      "keep_input_artifact": true
+      "keep_input_artifact": true,
+      "vagrantfile_template": "Vagrantfile"
     }
   ]
 }

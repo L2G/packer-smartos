@@ -10,6 +10,15 @@ Vagrant.configure('2') do |config|
   macaddr = [
     nil, '$macaddress1', '$macaddress2', '$macaddress3', '$macaddress4'
   ]
+
+  config.vm.guest = :smartos
+  config.vm.base_mac = macaddr[1]
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.ssh.username = 'root'
+  config.ssh.password = 'packer'
+  config.ssh.insert_key = false
+
   config.vm.provider 'virtualbox' do |v|
     (1..4).each do |n|
       v.customize ['modifyvm', :id, "--nic#{n}", 'nat']
@@ -17,7 +26,5 @@ Vagrant.configure('2') do |config|
       v.customize ['modifyvm', :id, "--macaddress#{n}", macaddr[n]]
     end
   end
-
-  config.vm.base_mac = macaddr[1]
 end
 EOVF
